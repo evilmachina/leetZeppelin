@@ -2,6 +2,7 @@
 #include <RF12.h>
 
 byte dataToSend = 0;
+byte sendBuffer[3];
 
 void setup()
 {
@@ -17,6 +18,12 @@ void setup()
     Right: r
     Forward: f
     Reverse: b
+    
+    X|Y|Z
+    -----
+     | |
+    
+    # = blank
   */
 
 void loop()
@@ -30,12 +37,22 @@ void loop()
   }
   
   if(Serial.available() > 0 && rf12_canSend()){
-    dataToSend = Serial.read();
+    fillSendBuffer();
     Serial.print("Data: ");
-    Serial.println(dataToSend);
-    rf12_sendStart(0, &dataToSend, sizeof(dataToSend));
+    rf12_sendStart(0, &sendBuffer, sizeof(sendBuffer));
   }
   
   delay(200);
 }
 
+void fillSendBuffer() {
+  for(byte i=0; i < 3; i++)
+    sendBuffer[i] = "#";
+  
+  int readamt = 0;
+  while(Serial.available() > 0) {
+    sendBuffer[readamt++] = Serial.read();  
+    if(readamt >= 3)
+      break;
+  }
+}
