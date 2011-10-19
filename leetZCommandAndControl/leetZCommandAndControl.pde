@@ -5,22 +5,37 @@ byte dataToSend = 0;
 
 void setup()
 {
-   // initialize the serial port and the RF12 driver
    Serial.begin(57600);
-   Serial.print("Hai!");
-   rf12_config();
-   // set up easy transmissions at maximum rate
-   rf12_easyInit(0);
+   rf12_initialize(13, RF12_868MHZ, 33);
 }
+
+/**
+  Proto:
+    Up: u
+    Down: d
+    Left: l
+    Right: r
+    Forward: f
+    Reverse: b
+  */
 
 void loop()
 {
-  rf12_easyPoll();
-  
-  if(Serial.available() > 0){
-    dataToSend = Serial.read();
-    
-    rf12_easySend(&dataToSend, sizeof(dataToSend));
+  if(rf12_recvDone() && rf12_crc == 0) {
+    Serial.print("Gots data");
+    for(byte i = 0; i < rf12_len; ++i){
+      Serial.print(rf12_data[i]);
+    }  
+    Serial.println();
   }
+  
+  if(Serial.available() > 0 && rf12_canSend()){
+    dataToSend = Serial.read();
+    Serial.print("Data: ");
+    Serial.println(dataToSend);
+    rf12_sendStart(0, &dataToSend, sizeof(dataToSend));
+  }
+  
+  delay(200);
 }
 
