@@ -47,7 +47,7 @@ void loop()
 
 void fillSendBuffer() {
   for(byte i=0; i < 3; i++)
-    sendBuffer[i] = "#";
+    sendBuffer[i] = '#';
   
   int readamt = 0;
   while(Serial.available() > 0) {
