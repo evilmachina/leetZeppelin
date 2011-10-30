@@ -1,7 +1,7 @@
-servo instälningar
+servo config
 
 
-bar svart
+left
 
 60 max
 
@@ -14,7 +14,7 @@ bar svart
 80 max
 
 
-andra
+right
 
 70 max
 
