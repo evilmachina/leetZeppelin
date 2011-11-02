@@ -1,91 +1,81 @@
-#include <Ports.h>
-#include <RF12.h>
 #include <Servo.h> 
 
 
 char payload[5] = "100";
 
-MilliTimer sendTimer;
-MilliTimer lastSignalTime;
+
 byte needToSend;
 
-Servo verticalMotor; 
+Servo tiltServo; 
 Servo leftMotor; 
 Servo rightMotor; 
-int verticalMotorPin = 9;         
-int leftMotorPin = 5;
-int rightMotorPin = 6;
+int tiltServoPin = 11;         
+int leftMotorPin = 9;
+int rightMotorPin = 10;
 
 void setup () 
 {
+     tiltServo.attach(tiltServoPin);
+     tiltServo.write(90);
     Serial.begin(57600);
     Serial.println("Go");
-    rf12_initialize(30, RF12_868MHZ, 33);
+    
 }
 
-
+boolean startBitOne = false;
+boolean startBitTwo = false;
+byte inByte;
 void loop () 
 {
-    if (rf12_recvDone() && rf12_crc == 0) {
-       // for (byte i = 0; i < rf12_len; ++i)
-        steamControll();
-       //     Serial.print(rf12_data[i]);
-        Serial.println();
-              
-    }
-    delay(100);
-  /* if (sendTimer.poll(3000))
-        needToSend = 1;
+     if (Serial.available() > 0) {
+         inByte = Serial.read();
+         Serial.println(inByte);
+         if(inByte == 0x13){
+           startBitOne = true;
+           startBitTwo = false;
+         }
+         if(startBitOne && inByte == 0x37){
+            startBitTwo = true;
+            Serial.println("headerRecived");
+         } 
+         if(startBitOne && startBitTwo){
+           setLeftMotor(Serial.read()); 
+           setRightMotor(Serial.read());
+           setTilt(Serial.read());
+         }       
+      }
 
-   if (needToSend && rf12_canSend()) {
-        needToSend = 0;
-         // readFule();
-        rf12_sendStart(0, payload, sizeof payload);
-      
-    }*/
 }
 
-void steamControll()
-{
-    for (byte i = 0; i < rf12_len; ++i)
-          Serial.print(rf12_data[i]);
-    
-    if(rf12_len == 3){
-        setLeftMotor(rf12_data[1]);
-        setRightMotor(rf12_data[0]);
-        setVerticalMotor(rf12_data[2]);
-    }
+
+
+void setLeftMotor(byte dir){
+  
+     if(dir == 127)
+        leftMotor.detach();
+     else if(dir < 127)
+         setMoterSpeed(leftMotor, leftMotorPin, 81);
+     else if(dir > 127)
+         setMoterSpeed(leftMotor, leftMotorPin, 90);
 }
 
-void setLeftMotor(char dir){
-     if(dir == 'F')
-         setMoterSpeed(leftMotor, leftMotorPin, 100);
-     else if(dir == 'R')
-         setMoterSpeed(leftMotor, leftMotorPin, 70);
-     else
-         leftMotor.detach();    
+void setRightMotor(byte dir){
+     if(dir == 127)
+         rightMotor.detach();   
+      else if(dir < 127)
+          setMoterSpeed(rightMotor, rightMotorPin, 68); 
+      else if(dir > 127)
+          setMoterSpeed(rightMotor, rightMotorPin, 77); 
+        
 }
 
-void setRightMotor(char dir){
-     if(dir == 'F')
-          setMoterSpeed(rightMotor, rightMotorPin, 70); 
-     else if(dir == 'R')
-          setMoterSpeed(rightMotor, rightMotorPin, 100); 
-     else
-         rightMotor.detach();     
-}
-
-void setVerticalMotor(char dir){
-     if(dir == 'D'){
-          setMoterSpeed(verticalMotor, verticalMotorPin, 100); 
-     }
-     else if(dir == 'U'){
-          setMoterSpeed(verticalMotor, verticalMotorPin, 70);
-     }
-     else
-     {
-         verticalMotor.detach();  
-     }    
+void setTilt(byte dir){
+     if(dir == 127)
+          tiltServo.write(90); 
+     else if(dir < 127)
+          tiltServo.write(70); 
+      else if(dir > 127)
+          tiltServo.write(120);
 }
 
 void setMoterSpeed(Servo s,int pin, int _speed)

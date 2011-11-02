@@ -1,13 +1,15 @@
 #include <Servo.h> 
 
-Servo verticalMotor; 
-int verticalMotorPin = 9; 
+Servo leftMotor; 
+Servo rightMotor; 
+int leftMotorPin = 9; 
 
 void setup()
 {
   Serial.begin(57600);
    Serial.println("\n Test");
-   verticalMotor.attach(9); 
+   //leftMotor.attach(9); 
+   rightMotor.attach(10);
 }
 
 void loop()
@@ -15,13 +17,15 @@ void loop()
   for(int i = 70; i < 95; i++)
   {
     Serial.println(i);
-    verticalMotor.write(i);       
+    //leftMotor.write(i); 
+     rightMotor.write(i-10);    
     delay(3000);
   }
   for(int i = 95; i > 70; i--)
   {
     Serial.println(i);
-    verticalMotor.write(i);       
+    //leftMotor.write(i);
+    rightMotor.write(i-10);      
     delay(3000);
   } 
 }
