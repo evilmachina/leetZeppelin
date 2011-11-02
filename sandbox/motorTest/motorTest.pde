@@ -48,8 +48,12 @@ void loop()
     myservo.write(pos);              // tell servo to go to position in variable 'pos' 
     delay(15);                       // waits 15ms for the servo to reach the position 
   }*/ 
-  verticalMotor.write(180);       
-  delay(2500);
+  verticalMotor.write(170);       
+  delay(3000);
+   verticalMotor.write(90);       
+  delay(3000);
+   verticalMotor.write(10); 
+ delay(3000);  
   /*myservo.detach();
   delay(2500);
   myservo.attach(9);

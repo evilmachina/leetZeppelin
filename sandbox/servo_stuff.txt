@@ -1,0 +1,28 @@
+servo config
+
+
+left
+
+60 max
+
+70  start
+
+73 stop
+
+75 start
+
+80 max
+
+
+right
+
+70 max
+
+start 83
+
+stop 85
+
+star 88
+
+90 max
+
