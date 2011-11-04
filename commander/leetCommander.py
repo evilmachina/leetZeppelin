@@ -66,7 +66,7 @@ class hexCommander(wx.Frame):
 			   Pan = 255
 			if Pan < 1:
 			   Pan = 1
-			Tilt = 128 - int(pitch) #self.tilt.GetValue()  + 128
+			Tilt =  128 - int(pitch)  #self.tilt.GetValue()  + 128
 			if Tilt > 255:
 			   Tilt = 255
 			if Tilt < 1:
@@ -86,23 +86,32 @@ class hexCommander(wx.Frame):
 			#print Buttons 
 			#if self.selStrafe.GetValue():
 			#    Buttons = BUT_RT
-			
-		
 
-			self.sendPacket(Xspeed, Rspeed, Tilt, Pan, Buttons, ClowPitch)
+			leftMotor = 127	
+			rightMotor = 127
+			if x > 140:
+			  leftMotor = 126	
+			  rightMotor = 126
+			if x < 120:
+			  leftMotor = 128	
+			  rightMotor = 128
+		#	if r > 135:
+		#	  leftMotor = 126	
+		#	  rightMotor = 128
+		#	if r < 115:
+		#	  leftMotor = 128	
+		#	  rightMotor = 126
+
+			self.sendPacket(leftMotor, rightMotor, Tilt)
 			self.timer.Start(200)
 
-	def sendPacket(self, Xspeed, Rspeed, Tilt, Pan, Buttons, ClowPitch):
+	def sendPacket(self, leftMotor, rightMotor, tilt):
 		# send output
-		self.ser.write('\xFF')
-		self.ser.write(chr(Xspeed))
-		self.ser.write(chr(Rspeed))
-		self.ser.write(chr(Tilt))
-		self.ser.write(chr(Pan))
-		self.ser.write(chr(Buttons))
-                self.ser.write(chr(ClowPitch)) #claw
-		
-		self.ser.write(chr(255 - ((Xspeed+Rspeed+Tilt+Pan+Buttons+ClowPitch)%256)))
+		self.ser.write('\x13')
+		self.ser.write('\x37')
+		self.ser.write(chr(leftMotor))
+		self.ser.write(chr(rightMotor))
+		self.ser.write(chr(tilt))
 
     	def onClose(self, event):
 		try:
