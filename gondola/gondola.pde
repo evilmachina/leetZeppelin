@@ -6,7 +6,7 @@
 char payload[5] = "100";
 
 
-byte needToSend;
+unsigned long timeLastCommand;
 
 Servo tiltServo; 
 Servo leftMotor; 
@@ -151,9 +151,17 @@ void loop ()
             bytesread = 0;
      }
    }
+   
+   
+   if( (millis() - timeLastCommand) > 1000){
+     stopMotors();
+   } 
 }
 
-
+void stopMotors(){
+      leftMotor.detach();
+      rightMotor.detach();
+}
 
 void setLeftMotor(byte dir){
   
