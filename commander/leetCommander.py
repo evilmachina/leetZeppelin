@@ -17,7 +17,7 @@ class hexCommander(wx.Frame):
 	ID_TIMER=wx.NewId()
 
 	def __init__(self): 
-		wx.Frame.__init__(self, None, -1, "hex Commander", style = wx.DEFAULT_FRAME_STYLE & ~ (wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
+		wx.Frame.__init__(self, None, -1, "leet Commander", style = wx.DEFAULT_FRAME_STYLE & ~ (wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
  
 		#self.ser = ser 
                 self.port = None 
@@ -57,36 +57,9 @@ class hexCommander(wx.Frame):
 		if self.port != None and self.wiimote != None:		
 			
 			status = self.wiimote.get_status()
-		#	r,x = status['nunchuk']['stick'] 
-		#	pitch, roll = self.nunchukTilt.wmplugin_exec(status['nunchuk']['acc'])
-		#	Xspeed = x 
-		#	Rspeed = r
-		#	Pan =  128 + int(roll)  #self.pan.GetValue()  + 128
-		#	if Pan > 255:
-		#	   Pan = 255
-		#	if Pan < 1:
-		#	   Pan = 1
-		#	Tilt =  128 - int(pitch)  #self.tilt.GetValue()  + 128
-		#	if Tilt > 255:
-		#	   Tilt = 255
-		#	if Tilt < 1:
-		#	   Tilt = 1
+		
 			
 			mpitch, mroll = self.moteTilt.wmplugin_exec(status['acc'])
-		#	ClowPitch = 128 + int(2 * mpitch)
-		#	if ClowPitch > 255:
-		#	   ClowPitch = 255
-		#	if ClowPitch < 1:
-		#	   ClowPitch = 1
-		#	Buttons = 64 
-		#	if (int(status['buttons'])&4) > 0:
-		#	   Buttons ^= 2
-		#	elif (int(status['buttons'])&8) > 0:
-		#	   Buttons ^= 1
-			#print Buttons 
-			#if self.selStrafe.GetValue():
-			#    Buttons = BUT_RT
-			
 			tilt = 127 + int(mroll)
 			if tilt > 217:
 			   tilt = 217
@@ -108,26 +81,23 @@ class hexCommander(wx.Frame):
 			elif (int(status['buttons'])&1024) > 0:
 			   leftMotor = 126	
 			   rightMotor = 128
-		#	if x < 120:
-		#	  leftMotor = 128	
-		#	  rightMotor = 128
-		#	if r > 135:
-		#	  leftMotor = 126	
-		#	  rightMotor = 128
-		#	if r < 115:
-		#	  leftMotor = 128	
-		#	  rightMotor = 126
+
+			if mpitch > 45:
+			   leftMotor = 127
+			if mpitch < -45:
+			   rightMotor = 127
 
 			self.sendPacket(leftMotor, rightMotor, tilt)
 			self.timer.Start(200)
 
 	def sendPacket(self, leftMotor, rightMotor, tilt):
-		# send output
-		self.ser.write('\x13')
-		self.ser.write('\x37')
+		self.ser.write(chr(int('13', 10)))
+		
 		self.ser.write(chr(leftMotor))
 		self.ser.write(chr(rightMotor))
 		self.ser.write(chr(tilt))
+		
+		self.ser.write(chr(int('10', 10)))
 
     	def onClose(self, event):
 		try:
