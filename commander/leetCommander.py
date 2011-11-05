@@ -86,17 +86,21 @@ class hexCommander(wx.Frame):
 			   leftMotor = 127
 			if mpitch < -45:
 			   rightMotor = 127
+			
+			tvb = 0;
+			if (int(status['buttons'])&4) > 0:
+			 tvb = 255;
 
-			self.sendPacket(leftMotor, rightMotor, tilt)
+			self.sendPacket(leftMotor, rightMotor, tilt, tvb)
 			self.timer.Start(200)
 
-	def sendPacket(self, leftMotor, rightMotor, tilt):
+	def sendPacket(self, leftMotor, rightMotor, tilt, tvb):
 		self.ser.write(chr(int('13', 10)))
 		
 		self.ser.write(chr(leftMotor))
 		self.ser.write(chr(rightMotor))
 		self.ser.write(chr(tilt))
-		
+		self.ser.write(chr(tvb))
 		self.ser.write(chr(int('10', 10)))
 
     	def onClose(self, event):
