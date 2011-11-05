@@ -15,8 +15,8 @@ def calculate_tilt(acc1):
 
 
 mote = Wiimote()
-nunchukTilt = TiltCalculator()
-nunchukTilt.wmplugin_init(mote.wiimote)
+#nunchukTilt = TiltCalculator()
+#nunchukTilt.wmplugin_init(mote.wiimote)
 moteTilt = TiltCalculator()
 moteTilt.wmplugin_init(mote.wiimote)
 while(1):
@@ -24,8 +24,8 @@ while(1):
   print mote.get_status()
   status = mote.get_status()
   print "mote pitch: %d roll: %d" % moteTilt.wmplugin_exec(status['acc'])
-  print "nunchukTilt pitch: %d roll: %d" % nunchukTilt.wmplugin_exec(status['nunchuk']['acc'])
-  print "nunchuk stick: X: %d Y: %d" % status['nunchuk']['stick'] 
+  #print "nunchukTilt pitch: %d roll: %d" % nunchukTilt.wmplugin_exec(status['nunchuk']['acc'])
+  #print "nunchuk stick: X: %d Y: %d" % status['nunchuk']['stick'] 
   print 'Button Report: %.4X' % (int(status['buttons'])&4)
 
 

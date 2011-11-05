@@ -57,44 +57,60 @@ class hexCommander(wx.Frame):
 		if self.port != None and self.wiimote != None:		
 			
 			status = self.wiimote.get_status()
-			r,x = status['nunchuk']['stick'] 
-			pitch, roll = self.nunchukTilt.wmplugin_exec(status['nunchuk']['acc'])
-			Xspeed = x 
-			Rspeed = r
-			Pan =  128 + int(roll)  #self.pan.GetValue()  + 128
-			if Pan > 255:
-			   Pan = 255
-			if Pan < 1:
-			   Pan = 1
-			Tilt =  128 - int(pitch)  #self.tilt.GetValue()  + 128
-			if Tilt > 255:
-			   Tilt = 255
-			if Tilt < 1:
-			   Tilt = 1
+		#	r,x = status['nunchuk']['stick'] 
+		#	pitch, roll = self.nunchukTilt.wmplugin_exec(status['nunchuk']['acc'])
+		#	Xspeed = x 
+		#	Rspeed = r
+		#	Pan =  128 + int(roll)  #self.pan.GetValue()  + 128
+		#	if Pan > 255:
+		#	   Pan = 255
+		#	if Pan < 1:
+		#	   Pan = 1
+		#	Tilt =  128 - int(pitch)  #self.tilt.GetValue()  + 128
+		#	if Tilt > 255:
+		#	   Tilt = 255
+		#	if Tilt < 1:
+		#	   Tilt = 1
 			
 			mpitch, mroll = self.moteTilt.wmplugin_exec(status['acc'])
-			ClowPitch = 128 + int(2 * mpitch)
-			if ClowPitch > 255:
-			   ClowPitch = 255
-			if ClowPitch < 1:
-			   ClowPitch = 1
-			Buttons = 64 
-			if (int(status['buttons'])&4) > 0:
-			   Buttons ^= 2
-			elif (int(status['buttons'])&8) > 0:
-			   Buttons ^= 1
+		#	ClowPitch = 128 + int(2 * mpitch)
+		#	if ClowPitch > 255:
+		#	   ClowPitch = 255
+		#	if ClowPitch < 1:
+		#	   ClowPitch = 1
+		#	Buttons = 64 
+		#	if (int(status['buttons'])&4) > 0:
+		#	   Buttons ^= 2
+		#	elif (int(status['buttons'])&8) > 0:
+		#	   Buttons ^= 1
 			#print Buttons 
 			#if self.selStrafe.GetValue():
 			#    Buttons = BUT_RT
-
+			
+			tilt = 127 + int(mroll)
+			if tilt > 217:
+			   tilt = 217
+			if tilt < 37:
+			   tilt = 37
+			
 			leftMotor = 127	
 			rightMotor = 127
-			if x > 140:
-			  leftMotor = 126	
-			  rightMotor = 126
-			if x < 120:
-			  leftMotor = 128	
-			  rightMotor = 128
+
+			if (int(status['buttons'])&1) > 0:
+			   leftMotor = 126	
+			   rightMotor = 126
+			elif (int(status['buttons'])&2) > 0:
+			   leftMotor = 128	
+			   rightMotor = 128
+			elif (int(status['buttons'])&2048) > 0:
+			   leftMotor = 128	
+			   rightMotor = 126
+			elif (int(status['buttons'])&1024) > 0:
+			   leftMotor = 126	
+			   rightMotor = 128
+		#	if x < 120:
+		#	  leftMotor = 128	
+		#	  rightMotor = 128
 		#	if r > 135:
 		#	  leftMotor = 126	
 		#	  rightMotor = 128
@@ -102,7 +118,7 @@ class hexCommander(wx.Frame):
 		#	  leftMotor = 128	
 		#	  rightMotor = 126
 
-			self.sendPacket(leftMotor, rightMotor, Tilt)
+			self.sendPacket(leftMotor, rightMotor, tilt)
 			self.timer.Start(200)
 
 	def sendPacket(self, leftMotor, rightMotor, tilt):
