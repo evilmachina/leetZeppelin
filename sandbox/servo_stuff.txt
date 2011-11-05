@@ -1,7 +1,9 @@
 servo config
 
 
-left
+2 -10 stop
+
+right
 
 60 max
 
@@ -14,7 +16,7 @@ left
 80 max
 
 
-right
+left
 
 70 max
 
