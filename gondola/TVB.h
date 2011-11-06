@@ -18,7 +18,7 @@
 #define NUM_ELEM(x) (sizeof (x) / sizeof (*(x)));
 
 // set define to 0 to turn off debug output
-#define DEBUG 1
+#define DEBUG 0
 #define DEBUGP(x) if (DEBUG == 1) { x ; }
 
 // Shortcut to insert single, non-optimized-out nop

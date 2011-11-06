@@ -11,7 +11,7 @@ unsigned long timeLastCommand, lastBatteryCheck;
 Servo tiltServo; 
 Servo leftMotor; 
 Servo rightMotor; 
-int tiltServoPin = 11;         
+int tiltServoPin = 6;         
 int leftMotorPin = 9;
 int rightMotorPin = 10;
 int ledPin = 13;  
@@ -219,17 +219,18 @@ void setMoterSpeed(Servo s,int pin, int _speed)
   
 }
 
+boolean readyToSendTVB = true;
+
 void startTVB(byte b){
-  if(b == 255)
+  if(b == 255 && readyToSendTVB){
     sendAllCodes();
+  }
 }
 
 
 void sendAllCodes() {
-  startOver = FALSE;
+  readyToSendTVB = false;
   num_codes = num_EUcodes;
- 
-
   // for every POWER code in our collection
   for (i=0 ; i < num_codes; i++) {
     PGM_P data_ptr;
@@ -345,13 +346,14 @@ void sendAllCodes() {
 
     // visible indication that a code has been output.
     quickflashLED();
+    handleIncomingData();
   }
 
   // flash the visible LED on PB0  8 times to indicate that we're done
   delay_ten_us(65500); // wait maxtime
   delay_ten_us(65500); // wait maxtime
   quickflashLEDx(8);
-
+  readyToSendTVB = true;
 }
 
 /****************************** LED AND DELAY FUNCTIONS ********/
