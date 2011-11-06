@@ -125,7 +125,23 @@ int bytesread = 0;
 int status = 0;
 void loop () 
 {
-     if (Serial.available() > 0) {
+    handleIncomingData();     
+
+   if( (millis() - timeLastCommand) > 1000){
+     stopMotors();
+   } 
+	status = digitalRead(lipolPin);
+	if(status == LOW)
+	{
+		Serial.write(13);
+		Serial.write(0x7f);
+		Serial.write(10);
+	}
+}
+
+void handleIncomingData(){
+  
+  if (Serial.available() > 0) {
        
          inByte = Serial.read();
          Serial.println(inByte);
@@ -155,17 +171,6 @@ void loop ()
             timeLastCommand = millis();
      }
    }
-
-   if( (millis() - timeLastCommand) > 1000){
-     stopMotors();
-   } 
-	status = digitalRead(lipolPin);
-	if(status == LOW)
-	{
-		Serial.write(13);
-		Serial.write(0x7f);
-		Serial.write(10);
-	}
 }
 
 void stopMotors(){
