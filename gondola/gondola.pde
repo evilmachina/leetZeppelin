@@ -152,6 +152,7 @@ void loop ()
             } 
             digitalWrite(ledPin, LOW);
             bytesread = 0;
+            timeLastCommand = millis();
      }
    }
 
@@ -164,7 +165,6 @@ void loop ()
 		Serial.write(13);
 		Serial.write(0x7f);
 		Serial.write(10);
-		Serial.flush();
 	}
 }
 
