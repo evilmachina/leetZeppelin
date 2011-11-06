@@ -158,9 +158,9 @@ void loop ()
 	status = digitalRead(lipolPin);
 	if(status == LOW)
 	{
-		Serial.Write(13);
-		Serial.Write(0x7f);
-		Serial.Write(10);
+		Serial.write(13);
+		Serial.write(0x7f);
+		Serial.write(10);
 		Serial.flush();
 	}
 }
