@@ -6,7 +6,7 @@
 char payload[5] = "100";
 
 
-unsigned long timeLastCommand;
+unsigned long timeLastCommand, lastBatteryCheck;
 
 Servo tiltServo; 
 Servo leftMotor; 
@@ -130,13 +130,14 @@ void loop ()
    if( (millis() - timeLastCommand) > 1000){
      stopMotors();
    } 
-	status = digitalRead(lipolPin);
-	if(status == LOW)
-	{
-		Serial.write(13);
-		Serial.write(0x7f);
-		Serial.write(10);
-	}
+  if((millis() - lastBatteryCheck) > 5000) {
+    status = digitalRead(lipolPin);
+    if(status == LOW)
+    {
+      Serial.println("low");
+    }
+    lastBatteryCheck = millis();
+  }
 }
 
 void handleIncomingData(){
