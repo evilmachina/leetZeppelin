@@ -15,6 +15,7 @@ int tiltServoPin = 11;
 int leftMotorPin = 9;
 int rightMotorPin = 10;
 int ledPin = 13;  
+int lipolPin = 6;
 
 //tv-b-gone code
 
@@ -91,6 +92,7 @@ void setup ()
     Serial.begin(57600);
     Serial.println("Go");
     pinMode(ledPin, OUTPUT);
+	pinMode(lipolPin, INPUT);
     setupTVBGone();
 }
 
@@ -120,6 +122,7 @@ void setupTVBGone(){
 byte inByte = 0;
 char code[4]; 
 int bytesread = 0;
+int status = 0;
 void loop () 
 {
      if (Serial.available() > 0) {
@@ -151,11 +154,18 @@ void loop ()
             bytesread = 0;
      }
    }
-   
-   
+
    if( (millis() - timeLastCommand) > 1000){
      stopMotors();
    } 
+	status = digitalRead(lipolPin);
+	if(status == LOW)
+	{
+		Serial.write(13);
+		Serial.write(0x7f);
+		Serial.write(10);
+		Serial.flush();
+	}
 }
 
 void stopMotors(){
