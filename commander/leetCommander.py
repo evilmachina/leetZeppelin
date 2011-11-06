@@ -16,6 +16,8 @@ class hexCommander(wx.Frame):
 	TIMER_ID = 100
 	ID_TIMER=wx.NewId()
 
+	ser = None
+
 	def __init__(self): 
 		wx.Frame.__init__(self, None, -1, "leet Commander", style = wx.DEFAULT_FRAME_STYLE & ~ (wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
  
@@ -93,8 +95,11 @@ class hexCommander(wx.Frame):
 
 			self.sendPacket(leftMotor, rightMotor, tilt, tvb)
 			self.timer.Start(200)
-		#if self.port != None:
-			
+		if self.ser != None:
+			value = self.ser.read(3)
+			if value == "low":
+				self.wiimote.rumble = 1
+
 
 	def sendPacket(self, leftMotor, rightMotor, tilt, tvb):
 		self.ser.write(chr(int('13', 10)))
