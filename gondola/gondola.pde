@@ -15,7 +15,7 @@ int tiltServoPin = 11;
 int leftMotorPin = 9;
 int rightMotorPin = 10;
 int ledPin = 13;  
-int lipolPin = 6;
+int lipolPin = 7;
 
 //tv-b-gone code
 

@@ -93,6 +93,8 @@ class hexCommander(wx.Frame):
 
 			self.sendPacket(leftMotor, rightMotor, tilt, tvb)
 			self.timer.Start(200)
+		#if self.port != None:
+			
 
 	def sendPacket(self, leftMotor, rightMotor, tilt, tvb):
 		self.ser.write(chr(int('13', 10)))
