@@ -92,7 +92,7 @@ void setup ()
     Serial.begin(57600);
     Serial.println("Go");
     pinMode(ledPin, OUTPUT);
-	pinMode(lipolPin, INPUT);
+    pinMode(lipolPin, INPUT);
     setupTVBGone();
 }
 
@@ -122,7 +122,6 @@ void setupTVBGone(){
 byte inByte = 0;
 char code[4]; 
 int bytesread = 0;
-int status = 0;
 void loop () 
 {
     handleIncomingData();     
@@ -130,14 +129,6 @@ void loop ()
    if( (millis() - timeLastCommand) > 1000){
      stopMotors();
    } 
-  if((millis() - lastBatteryCheck) > 5000) {
-    status = digitalRead(lipolPin);
-    if(status == LOW)
-    {
-      Serial.println("low");
-    }
-    lastBatteryCheck = millis();
-  }
 }
 
 void handleIncomingData(){
@@ -193,9 +184,9 @@ void setRightMotor(byte dir){
      if(dir == 127)
          rightMotor.detach();   
       else if(dir < 127)
-          setMoterSpeed(rightMotor, rightMotorPin, 68); 
+          setMoterSpeed(rightMotor, rightMotorPin, 69); 
       else if(dir > 127)
-          setMoterSpeed(rightMotor, rightMotorPin, 77); 
+          setMoterSpeed(rightMotor, rightMotorPin, 73); 
         
 }
 
