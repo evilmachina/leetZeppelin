@@ -15,7 +15,6 @@ class hexCommander(wx.Frame):
 
 	TIMER_ID = 100
 	ID_TIMER=wx.NewId()
-
 	ser = None
 
 	def __init__(self): 
@@ -84,21 +83,22 @@ class hexCommander(wx.Frame):
 			   leftMotor = 126	
 			   rightMotor = 128
 
-			if mpitch > 45:
+			if mpitch > 20:
 			   leftMotor = 127
-			if mpitch < -45:
+			if mpitch < -20:
 			   rightMotor = 127
 			
 			tvb = 0;
-			if (int(status['buttons'])&4) > 0:
-			 tvb = 255;
+			if ((int(status['buttons'])&4) > 0) and ((int(status['buttons'])&8) > 0):
+			 	tvb = 255;
 
 			self.sendPacket(leftMotor, rightMotor, tilt, tvb)
 			self.timer.Start(200)
 		if self.ser != None:
+			
 			value = self.ser.read(3)
 			if value == "low":
-				self.wiimote.rumble = 1
+				self.wiimote.wiimote.rumble = 1
 
 
 	def sendPacket(self, leftMotor, rightMotor, tilt, tvb):
