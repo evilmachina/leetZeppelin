@@ -1,4 +1,30 @@
-			
+The leetZeppelin where built for tretton37 (http://tretton37.com/) exebition on Öredev 2011.
+More info on the project can be found at [TBA]
+
+The Tv-B-Gone code used is a slitty modded version of Ken Shirriff's arduino port https://github.com/shirriff/Arduino-TV-B-Gone
+
+
+Here’s a list of the important parts used.
+*Hardware - Zeppelin
+*Arduino FIO
+*XBee
+*Servo motors
+*2 x  Servo motor or motor controller
+*Motor
+*Proppeler
+*Blimp Balloon Envelope (rctoys.com)
+*IR Led
+*Carbon fiber tube
+*Lego Gears
+*Lipo Battery – 1s 1000 mAh
+ 
+Hardware - C&C
+*XBee
+*XBee Explorer USB
+*Wii mote
+*Computer running Linux
+*Bluetooth dongle
+
        _..--=--..._
     .-'            '-.  .-.
    /.'              '.\/  /
